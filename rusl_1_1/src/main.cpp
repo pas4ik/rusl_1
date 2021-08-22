@@ -29,6 +29,8 @@ void setup() {
   pinMode(2, INPUT_PULLUP);   // photo 1
   pinMode(3, INPUT_PULLUP);   // photo 2
   pinMode(4, INPUT_PULLUP);   // cam error signal
+  pinMode(5, OUTPUT);         // out rele
+  digitalWrite(5, HIGH);      // invers, active low
   // init ring buffer
   buff_ind_write = 1;
   buff_ind_read = 1;
@@ -216,11 +218,13 @@ if (Serial.available() > 0)
       if (temp == CAM_NO_ERR)
       {
         digitalWrite(LED_BUILTIN, HIGH);
+        digitalWrite(5, LOW);   // rele on
         out_time = millis();
         out_on = 1;
       } else
       {
         digitalWrite(LED_BUILTIN, LOW);
+        digitalWrite(5, HIGH);   // rele off
         out_on = 1;
       }
 
@@ -245,6 +249,7 @@ if (Serial.available() > 0)
     {
       out_on = 0;
       digitalWrite(LED_BUILTIN, LOW);
+      digitalWrite(5, HIGH);
     }
   }
 
